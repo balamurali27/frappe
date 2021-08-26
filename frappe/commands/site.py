@@ -298,7 +298,10 @@ def backup(context, with_files=False, backup_path_db=None, backup_path_files=Non
 	verbose = context.verbose
 	for site in context.sites:
 		frappe.init(site=site)
-		frappe.connect()
+		try:
+			frappe.connect_replica()
+		except Exception as e:
+			frappe.connect()
 		odb = scheduled_backup(ignore_files=not with_files, backup_path_db=backup_path_db, backup_path_files=backup_path_files, backup_path_private_files=backup_path_private_files, force=True)
 		if verbose:
 			from frappe.utils import now
