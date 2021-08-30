@@ -425,7 +425,10 @@ def backup(context, with_files=False, backup_path=None, backup_path_db=None, bac
 	for site in context.sites:
 		try:
 			frappe.init(site=site)
-			frappe.connect()
+			try:
+				frappe.connect_replica()
+			except Exception as e:
+				frappe.connect()
 			odb = scheduled_backup(
 				ignore_files=not with_files,
 				backup_path=backup_path,
