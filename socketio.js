@@ -7,6 +7,7 @@ const log = console.log; // eslint-disable-line
 const subscriber = get_redis_subscriber();
 
 const io = require("socket.io")(conf.socketio_port, {
+	allowEIO3: true,
 	cors: {
 		// Should be fine since we are ensuring whether hostname and origin are same before adding setting listeners for s socket
 		origin: true,
