@@ -1,11 +1,13 @@
 # Copyright (c) 2022, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
+import frappe
 
 from sentry_sdk.hub import Hub
 from sentry_sdk.integrations import Integration
 from sentry_sdk.tracing_utils import record_sql_queries
 from frappe.database.database import Database
 from sentry_sdk.utils import capture_internal_exceptions
+from sentry_sdk import configure_scope
 
 
 class FrappeIntegration(Integration):
@@ -38,3 +40,13 @@ class FrappeIntegration(Integration):
 		Database.connect = connect
 		Database.sql = sql
 
+
+def set_sentry_context():
+	with configure_scope() as scope:
+		if frappe.form_dict.cmd:
+			path = f"/api/method/{frappe.form_dict.cmd}"
+		else:
+			path = frappe.request.path
+		scope.transaction.name = path
+
+		scope.user = {"id": frappe.session.user, "email": frappe.session.user}

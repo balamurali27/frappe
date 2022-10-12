@@ -44,7 +44,7 @@ def application(request: Request):
 		rollback = True
 
 		init_request(request)
-
+		frappe.sentry.set_sentry_context()
 		frappe.api.validate_auth()
 
 		if request.method == "OPTIONS":
