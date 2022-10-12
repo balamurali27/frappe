@@ -25,6 +25,7 @@ from frappe.utils import cint, get_site_name, sanitize_html
 from frappe.utils.error import make_error_snapshot
 from frappe.website.serve import get_response
 import sentry_sdk
+from sentry_sdk.integrations.wsgi import SentryWsgiMiddleware
 
 local_manager = LocalManager(frappe.local)
 
@@ -362,6 +363,9 @@ sentry_sdk.init(
 	traces_sample_rate=1.0,
 	attach_stacktrace=True,
 )
+
+
+application = SentryWsgiMiddleware(application)
 
 
 def serve(
