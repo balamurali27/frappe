@@ -55,7 +55,7 @@ class Role(Document):
 		"""update system user desk access if this has changed in this update"""
 		if frappe.flags.in_install:
 			return
-		if self.has_value_changed("desk_access"):
+		if self.has_value_changed("desk_access") and self.desk_access:
 			for user_name in get_users(self.name):
 				user = frappe.get_doc("User", user_name)
 				user_type = user.user_type
