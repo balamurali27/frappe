@@ -26,6 +26,8 @@ from frappe.utils.error import make_error_snapshot
 from frappe.website.serve import get_response
 import sentry_sdk
 from sentry_sdk.integrations.wsgi import SentryWsgiMiddleware
+from frappe.sentry import FrappeIntegration
+
 
 local_manager = LocalManager(frappe.local)
 
@@ -362,6 +364,8 @@ sentry_sdk.init(
 	send_default_pii=True,
 	traces_sample_rate=1.0,
 	attach_stacktrace=True,
+	integrations=[FrappeIntegration()],
+	_experiments={'record_sql_params': True}
 )
 
 
