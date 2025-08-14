@@ -10,6 +10,7 @@ from functools import lru_cache
 from itertools import chain
 from types import FunctionType, MethodType, ModuleType
 from typing import TYPE_CHECKING, Any
+from bs4 import BeautifulSoup
 
 import orjson
 import RestrictedPython.Guards
@@ -294,6 +295,7 @@ def get_safe_globals():
 		run_script=run_script,
 		is_job_queued=is_job_queued,
 		get_visible_columns=get_visible_columns,
+		BeautifulSoup=BeautifulSoup,
 	)
 
 	out.frappe.update(SAFE_EXCEPTIONS)
