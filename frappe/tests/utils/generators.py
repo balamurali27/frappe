@@ -320,7 +320,7 @@ def _try_create(record, reset=False, commit=False) -> tuple["Document", bool]:
 		d.submit()
 
 	if commit:
-		frappe.db.commit()
+		frappe.db.commit(ignore_in_test_check=True)
 
 	return d, True
 

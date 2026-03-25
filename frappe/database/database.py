@@ -1175,7 +1175,7 @@ class Database:
 		mode = "READ ONLY" if read_only else ""
 		self.sql(f"START TRANSACTION {mode}")
 
-	def commit(self, *, chain=False):
+	def commit(self, *, chain=False, ignore_in_test_check=False):
 		"""Commit current transaction. Calls SQL `COMMIT`."""
 		if self._disable_transaction_control:
 			warnings.warn(message=TRANSACTION_DISABLED_MSG, stacklevel=2)
@@ -1185,7 +1185,7 @@ class Database:
 		self.after_rollback.reset()
 
 		self.before_commit.run()
-		if frappe.in_test:
+		if not ignore_in_test_check and frappe.in_test:
 			frappe.throw(
 				"Cannot commit transaction in test. It is not recommendeded to commit during press tests as they're atomic in nature and result in flakiness"
 			)
