@@ -1185,6 +1185,10 @@ class Database:
 		self.after_rollback.reset()
 
 		self.before_commit.run()
+		if frappe.in_test:
+			frappe.throw(
+				"Cannot commit transaction in test. It is not recommendeded to commit during press tests as they're atomic in nature and result in flakiness"
+			)
 
 		if chain:
 			self.sql("commit and chain")
